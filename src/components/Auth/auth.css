@@ -77,10 +77,10 @@
 .input:focus {
     border: 1px solid var(--green);
     color: var(--green);
-    font-size: 17px;
 }
 
-.auth__input span {
+.auth__input span,
+.auth_send span {
     font-weight: 400;
     font-size: 14px;
     color: var(--red);

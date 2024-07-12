@@ -1,16 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
+import { jwtDecode } from 'jwt-decode';
 import Logo from '../../assets/image/header/Logo.svg';
 import Button from "../Button/Button";
 import { useState } from "react";
 import axios from "axios";
 
 export default function Auth() {
-
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState("");
     const navigate = useNavigate();
-
 
     const handleAuth = async (e) => {
         e.preventDefault();
@@ -21,9 +20,15 @@ export default function Auth() {
                 password: password,
             });
             console.log(response.data);
+            localStorage.setItem('token', response.data.token);
             navigate("/")
         } catch (error) {
-            console.error('Ошибка авторизации:', error);
+            if (error.response && error.response.status === 401) {
+                console.error('Ошибка авторизации:', error);
+                setError("Неверные учетные данные");
+            } else {
+                setError("Произошла ошибка. Пожалуйста, попробуйте снова.");
+            }
         }
     }
 
@@ -47,7 +52,6 @@ export default function Auth() {
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                             />
-                            <span>Тут будет ошибка</span>
                         </div>
 
                         <div className="auth__input">
@@ -60,12 +64,11 @@ export default function Auth() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            <span>Тут будет ошибка</span>
                         </div>
-
                     </div>
                     <div className="auth_send">
                         <Button titleBtn={'Войти'} />
+                        {error && <span className="error">{error}</span>}
                     </div>
                 </form>
             </div>
