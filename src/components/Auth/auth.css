@@ -73,6 +73,10 @@
     color: #B6B6B6;
 }
 
+.input:focus {
+    background: transparent;
+}
+
 .input:not(:placeholder-shown),
 .input:focus {
     border: 1px solid var(--green);

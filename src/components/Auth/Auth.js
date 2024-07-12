@@ -1,5 +1,4 @@
 import { Link, useNavigate } from "react-router-dom";
-import { jwtDecode } from 'jwt-decode';
 import Logo from '../../assets/image/header/Logo.svg';
 import Button from "../Button/Button";
 import { useState } from "react";

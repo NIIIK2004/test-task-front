@@ -22,15 +22,18 @@
 .cabinets__block:hover .cabinets_panel {
     opacity: 1;
     backdrop-filter: blur(8px);
+    border-radius: 13px;
 }
 
 .cabinets__img {
-    position: relative;
+    object-fit: cover;
+    width: 306px;
+    height: 306px;
+    border-radius: 10px;
 }
 
-.cabinets__img img {
-    object-fit: cover;
-    width: fit-content;
+.cabinets_img-inner {
+    position: relative;
 }
 
 .cabinets_panel {

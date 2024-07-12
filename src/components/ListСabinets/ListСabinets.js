@@ -1,31 +1,32 @@
-import { useEffect, useState } from 'react'
-import { Сabinet } from './Сabinet'
+import { useEffect, useState } from 'react';
+import Cabinet from './Сabinet'
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+
 
 export default function ListСabinets() {
-
-    const [cabinets, setCabinets] = useState([]);
+    const [wardrobes, setWardrobes] = useState([]);
 
     useEffect(() => {
-        const fetchCabinets = async () => {
+        const fetchWardrobes = async () => {
             try {
-                const response = await axios.get('http://localhost:7362/admin/wardrobe/all');
-                setCabinets(response.data.wardrobe); // Проверьте структуру ответа и доступ к массиву шкафов
+                const response = await axios.get('http://localhost:7362/all/wardrobe');
+                setWardrobes(response.data.wardrobe);
             } catch (error) {
-                console.error('Error fetching cabinets:', error);
+                console.error('Ошибка при загрузке данных:', error);
             }
         };
-
-        fetchCabinets();
+        fetchWardrobes();
     }, []);
 
     return (
         <section className="cabinets__wrapper">
             <div className="container">
                 <h1 className="title">Список доступных шкафов</h1>
+                <Link to="/addCabinetForm">Добавить Шкаф</Link>
                 <ul className="cabinets__list">
-                    {cabinets.map((cabinet, index) => (
-                        <Cabinet key={index} cabinet={cabinet} />
+                    {wardrobes.map((wardrobe) => (
+                        <Cabinet key={wardrobe.id} wardrobe={wardrobe} />
                     ))}
                 </ul>
             </div>

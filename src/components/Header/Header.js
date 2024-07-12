@@ -7,10 +7,6 @@ import Like from '../../assets/image/header/Like.svg';
 import Basket from '../../assets/image/header/Basket.svg';
 import User from '../../assets/image/header/User.svg';
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { getUserNameFromToken } from '../Auth/Auth';
-
-
 
 export default function Header() {
   return (

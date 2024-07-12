@@ -1,0 +1,73 @@
+.cabinet_section {
+    background: var(--block);
+    border-radius: 15px;
+    padding: 30px;
+}
+
+.cabinet_form-add {
+    margin-top: 15px;
+}
+
+.cabinet_form-top {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px 10px;
+}
+
+.cabinet_form-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+textarea {
+    outline: none;
+    border: 1px solid #B6B6B6;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 16px;
+    color: #B6B6B6;
+    padding: 19px 20px;
+    transition: all .3s;
+    resize: none;
+    height: 180px;
+}
+
+textarea:focus {
+    background: transparent;
+}
+
+.inputFile {
+    position: relative;
+    outline: none;
+    border: 1px solid #B6B6B6;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 16px;
+    color: #B6B6B6;
+    padding: 19px 20px;
+    transition: all .3s;
+    height: 58px;
+    margin: 16px 0 0;
+}
+
+.inputFile:hover {
+    transform: scale(.98);
+}
+
+.inputFile-label {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.inputFile input {
+    display: none;
+}

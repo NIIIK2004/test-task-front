@@ -2,6 +2,8 @@
 @import url("../../components/Catalog/catalog.css");
 @import url("../../components/ListСabinets/ListСabinets.css");
 @import url("../../components/Auth/auth.css");
+@import url("../../components/ListСabinets/admin/CabinetForm.css");
+@import url("../../components/CabinetDetails/CabinetDetails.css");
 @import url("./reset.css");
 @import url("./style.css");
 
