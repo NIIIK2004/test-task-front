@@ -1,0 +1,20 @@
+@import url("../../components/Header/header.css");
+@import url("../../components/Catalog/catalog.css");
+@import url("../../components/ListСabinets/ListСabinets.css");
+@import url("../../components/Auth/auth.css");
+@import url("./reset.css");
+@import url("./style.css");
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+:root {
+    --green: #62bb46;
+    --black: #333;
+    --block: #f3f3f3;
+    --gray: #b6b6b6;
+    --red: #bb4646;
+}
