@@ -1,23 +1,30 @@
-import React from 'react';
-
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Auth from './components/Auth/Auth';
-import Home from './components/Home/Home';
-import Reg from './components/Auth/Registration';
-import AddCabinetForm from './components/ListСabinets/admin/AddCabinetForm';
+import React, { lazy, Suspense } from 'react';
 
 import './App.css';
 import './assets/css/global.css';
 
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+const Auth = lazy(() => import('./components/Auth/Auth'));
+const Home = lazy(() => import('./components/Home/Home'));
+const Reg = lazy(() => import('./components/Auth/Registration'));
+const AddCabinetForm = lazy(() => import('./components/ListСabinets/admin/AddCabinetForm'));
+const CabinetDetails = lazy(() => import('./components/CabinetDetails/CabinetDetails'));
+const Loading = () => <p className="loading"><span class="loader"></span>Загрузка...</p>;
+
 export default function App() {
   return (
     <Router>
-      <Routes>
-        <Route path='/auth' element={<Auth />} />
-        <Route path='/reg' element={<Reg />} />
-        <Route path='/' element={<Home />} />
-        <Route path="/addCabinetForm" element={<AddCabinetForm />} />
-      </Routes>
+      <Suspense fallback={<Loading />}>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/auth' element={<Auth />} />
+          <Route path='/reg' element={<Reg />} />
+          <Route path="/addCabinetForm" element={<AddCabinetForm />} />
+          <Route path="/wardrobe/:id" element={<CabinetDetails />} />
+          <Route path="/wardrobe/edit/:id" element={<AddCabinetForm />} />
+        </Routes>
+      </Suspense>
     </Router>
   );
 }

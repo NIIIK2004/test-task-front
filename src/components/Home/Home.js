@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import Header from '../Header/Header';
 import Catalog from '../Catalog/Catalog';
 import ListCabinet from '../ListСabinets/ListСabinets';
@@ -9,7 +9,7 @@ export default function Home() {
     <Fragment>
       <Header />
       <Catalog />
-      <ListCabinet />
+      <ListCabinet titleSection="Список доступных шкафов" showAll={true} />
       <Footer />
     </Fragment>
   );

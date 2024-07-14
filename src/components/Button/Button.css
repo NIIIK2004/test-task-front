@@ -15,3 +15,52 @@
 .button:hover {
     background: #6ACC4C;
 }
+
+.button-like,
+.button-stars,
+.button-basket {
+    position: relative;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: 20px 58px;
+    font-weight: 500;
+}
+
+.button-like,
+.button-stars {
+    color: var(--green);
+    border: 1px solid var(--green);
+    border-radius: 60px;
+    background: transparent;
+}
+
+.button-like:hover,
+.button-stars:hover {
+    background: #efefef;
+}
+
+
+.button-basket::before {
+    content: "";
+    background: url("../../assets/image/сabinet/basket.svg") no-repeat;
+    width: 21px;
+    height: 21px;
+    display: block;
+}
+
+.button-like::before {
+    content: "";
+    background: url("../../assets/image/сabinet/like.svg") no-repeat;
+    width: 21px;
+    height: 21px;
+    display: block;
+}
+
+.button-stars::before {
+    content: "";
+    background: url("../../assets/image/сabinet/star.svg") no-repeat;
+    width: 21px;
+    height: 21px;
+    display: block;
+}

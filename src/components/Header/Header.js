@@ -1,14 +1,40 @@
-import Logo from '../../assets/image/header/Logo.svg';
-import Location from '../../assets/image/header/Location.svg';
-import Office from '../../assets/image/header/Office.svg';
-import Phone from '../../assets/image/header/Phone.svg';
-import Star from '../../assets/image/header/Star.svg';
-import Like from '../../assets/image/header/Like.svg';
-import Basket from '../../assets/image/header/Basket.svg';
-import User from '../../assets/image/header/User.svg';
-import { Link } from 'react-router-dom';
+import * as images from '../images/image';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import Button from '../Button/Button';
+import axios from 'axios';
 
 export default function Header() {
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoggedIn(true)
+    } else {
+      setIsLoggedIn(false)
+    }
+  }, []);
+
+
+  const handleLogout = async () => {
+    try {
+      await axios.post('http://localhost:7362/logout', null, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      localStorage.removeItem('token');
+      setIsLoggedIn(false);
+      navigate('/');
+    } catch (error) {
+      console.error('Ошибка выхода из системы:', error);
+
+    }
+  }
+
   return (
     <header>
       <div className="container">
@@ -16,18 +42,18 @@ export default function Header() {
           <ul>
             <li>
               <a href="#">
-                <img src={Location} alt="" />Белореченск
+                <img src={images.Location} alt="" />Белореченск
               </a>
             </li>
             <li>
               <a href="tel:+8 (495) 744-72-33">
-                <img src={Phone} alt="" />
+                <img src={images.Phone} alt="" />
                 8 (495) 744-72-33
               </a>
             </li>
             <li>
               <a href="#">
-                <img src={Office} alt="" />С 07:00 до 20:00 мск
+                <img src={images.Office} alt="" />С 07:00 до 20:00 мск
               </a>
             </li>
           </ul>
@@ -35,7 +61,9 @@ export default function Header() {
 
         <div className="header">
           <div className="header-left">
-            <img src={Logo} />
+            <Link to={"/"}>
+              <img src={images.Logo} />
+            </Link>
             <label className="search" for="inputSearch">
               <input id="inputSearch" type="search" placeholder='Поиск' />
             </label>
@@ -44,31 +72,44 @@ export default function Header() {
             <ul className='header_list-link'>
               <li>
                 <a href="#">
-                  <img src={Star} alt="" />
+                  <img src={images.Star} alt="" />
                   Сравниваемые
                 </a>
               </li>
               <li>
                 <a href="#">
-                  <img src={Like} alt="" />
+                  <img src={images.Like} alt="" />
                   Избранное
                 </a>
               </li>
               <li>
                 <a href="#">
-                  <img src={Basket} alt="" />
+                  <img src={images.Basket} alt="" />
                   Корзина
                 </a>
               </li>
-              <li>
-                <Link to="/auth">
-                  <img src={User} alt="" />Войти
-                </Link>
-              </li>
+              {isLoggedIn ? (
+                <>
+                  <li>
+                    <Link to="/profile">
+                      <img src={images.User} alt="" />Профиль
+                    </Link>
+                  </li>
+                  <li>
+                    <Button onClick={handleLogout} titleBtn={"Выход"} />
+                  </li>
+                </>
+              ) : (
+                <li>
+                  <Link to="/auth">
+                    <img src={images.User} alt="" />Войти
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
         </div>
       </div>
-    </header>
+    </header >
   );
 }

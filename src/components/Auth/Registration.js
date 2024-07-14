@@ -1,34 +1,63 @@
 import { Link, useNavigate } from "react-router-dom";
 import Logo from '../../assets/image/header/Logo.svg';
 import Button from "../Button/Button";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import axios from 'axios';
-
+import IMask from 'imask';
 
 export default function Registration() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [fullName, setFullName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState("");
-    const [error, setError] = useState("");
+    const [errors, setErrors] = useState({});
     const navigate = useNavigate();
+
+    const phoneInputRef = useRef(null);
+
+
+    useEffect(() => {
+        if (phoneInputRef.current) {
+            const maskOptions = {
+                mask: '+{7}(000)000-00-00'
+            };
+            const mask = IMask(phoneInputRef.current, maskOptions);
+            return () => {
+                mask.destroy();
+            };
+        }
+    }, []);
 
 
     const handleRegistration = async (event) => {
-        event.preventDefault(); 
+        event.preventDefault();
+        setErrors({});
+        
         if (password !== passwordConfirm) {
-            setError("Пароли не совпадают");
+            setErrors(prevErrors => ({ ...prevErrors, passwordConfirm: 'Пароли не совпадают' }));
             return;
         }
 
-        try {
+         try {
             const response = await axios.post('http://localhost:7362/auth/registration', {
-                username: username,
-                password: password,
+                username,
+                full_name: fullName,
+                email,
+                phone,
+                password,
+                hashed_password: passwordConfirm,
             });
             console.log(response.data);
             navigate("/auth");
         } catch (error) {
-            console.error('Ошибка регистрации:', error);
+            if (error.response && error.response.data) {
+                const serverErrors = error.response.data.errors || {};
+                setErrors(serverErrors);
+            } else {
+                setErrors(prevErrors => ({ ...prevErrors, server: 'Ошибка регистрации' }));
+            }
         }
     }
 
@@ -44,9 +73,15 @@ export default function Registration() {
                     <div className="auth__inputs">
                         <div className="auth__input">
                             <label htmlFor="FIO">Ваше ФИО</label>
-                            <input className="input" id="FIO" type="text" placeholder="Введите имя" />
-                            <span>Тут будет ошибка</span>
-                        </div>
+                            <input
+                                className="input"
+                                id="FIO"
+                                type="text"
+                                placeholder="Введите имя"
+                                value={fullName}
+                                onChange={(e) => setFullName(e.target.value)} />
+                            {errors.fullName && <span className="error">{errors.fullName}</span>}
+                            </div>
 
                         <div className="auth__input">
                             <label htmlFor="login">Логин</label>
@@ -58,19 +93,32 @@ export default function Registration() {
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                             />
-                            <span>Тут будет ошибка</span>
+                            <span>{errors.username}</span>
                         </div>
 
                         <div className="auth__input">
                             <label htmlFor="number">Телефон</label>
-                            <input className="input" id="number" type="text" placeholder="+7-(918)" />
-                            <span>Тут будет ошибка</span>
+                            <input
+                                className="input"
+                                id="number"
+                                type="text"
+                                placeholder="+7-(918)"
+                                ref={phoneInputRef}
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)} />
+                            <span>{errors.phone}</span>
                         </div>
 
                         <div className="auth__input">
                             <label htmlFor="email">Почта</label>
-                            <input className="input" id="email" type="email" placeholder="Введите свою почту" />
-                            <span>Тут будет ошибка</span>
+                            <input
+                                className="input"
+                                id="email"
+                                type="email"
+                                placeholder="Введите свою почту"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)} />
+                            <span>{errors.email}</span>
                         </div>
 
                         <div className="auth__input">
@@ -83,7 +131,7 @@ export default function Registration() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            <span>Тут будет ошибка</span>
+                            <span>{errors.password}</span>
                         </div>
 
                         <div className="auth__input">
@@ -96,7 +144,7 @@ export default function Registration() {
                                 value={passwordConfirm}
                                 onChange={(e) => setPasswordConfirm(e.target.value)}
                             />
-                            <span>Тут будет ошибка</span>
+                            <span>{errors.passwordConfirm}</span>
                         </div>
                     </div>
                     <div className="auth_send">

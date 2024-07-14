@@ -3,9 +3,30 @@ import Like from '../../assets/image/header/Like.svg';
 import Shkaf from '../../assets/image/сabinet/test.png';
 import Button from '../Button/Button';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 
-export default function Cabinet({ wardrobe }) {
+export default function Cabinet({ wardrobe, onDelete }) {
+
+    const handleDelete = async () => {
+        const confirmDelete = window.confirm(`Вы уверены, что хотите удалить шкаф "${wardrobe.title}"?`);
+        if (!confirmDelete) return;
+
+        try {
+            await axios.delete(`http://localhost:7362/admin/wardrobe/delete/${wardrobe.id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            alert("Шкаф успешно удален");
+            onDelete(wardrobe.id);
+        } catch (error) {
+            console.error('Ошибка при удалении шкафа:', error);
+            alert("Произошла ошибка при удалении шкафа.");
+        }
+    }
+
+
     return (
         <li className="cabinets__block" key={wardrobe.id}>
             <Link to={`/wardrobe/${wardrobe.id}`}>
@@ -30,6 +51,11 @@ export default function Cabinet({ wardrobe }) {
                     </div>
                 </div>
             </Link>
+            <div className="panel_admin">
+                <button className="cabinet_delete" onClick={handleDelete}></button>
+                <Link className="cabinet_edit" to={`/wardrobe/edit/${wardrobe.id}`}></Link>
+            </div>
+
         </li>
     );
 }

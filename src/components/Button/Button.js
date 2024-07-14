@@ -1,7 +1,7 @@
-import '../Button/Button.css';
+import './Button.css';
 
-export default function Button({ titleBtn }) {
+export default function Button({ titleBtn, className = "button", onClick}) {
     return (
-        <button className="button">{titleBtn}</button>
-    )
+        <button onClick={onClick} className={className}>{titleBtn}</button>
+    );
 }

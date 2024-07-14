@@ -1,14 +1,34 @@
 import { Link, useNavigate } from "react-router-dom";
 import Logo from '../../assets/image/header/Logo.svg';
 import Button from "../Button/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
+
+axios.interceptors.request.use(
+    config => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    error => {
+        return Promise.reject(error);
+    }
+);
 
 export default function Auth() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState("");
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            navigate('/');
+        }
+    }, [navigate]);
 
     const handleAuth = async (e) => {
         e.preventDefault();
@@ -37,7 +57,7 @@ export default function Auth() {
                 <img src={Logo} className="logo_auth" />
                 <form onSubmit={handleAuth} className="auth__wrapper">
                     <div className="auth_top">
-                        <h1 className="auth__title">Регистрация</h1>
+                        <h1 className="auth__title">Авторизация</h1>
                         <Link className="auth__link" to="/reg">Нет аккаунта? Зарегистрироваться?</Link>
                     </div>
                     <div className="auth__inputs">
