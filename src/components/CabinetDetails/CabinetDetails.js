@@ -5,6 +5,7 @@ import Header from "../Header/Header";
 import ListCabinet from "../ListСabinets/ListСabinets";
 import * as images from '../images/image';
 import Button, { ButtonBasket, ButtonLike, ButtonStars } from "../Button/Button";
+import MyForm from "../Form/MyForm";
 
 
 
@@ -126,6 +127,8 @@ export default function CabinetDetails() {
             </section>
 
             <ListCabinet titleSection="Другие шкафы" showAll={false} />
+
+            <MyForm />
         </>
     );
 }

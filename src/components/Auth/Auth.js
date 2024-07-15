@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Logo from '../../assets/image/header/Logo.svg';
 import Button from "../Button/Button";
 import { useEffect, useState } from "react";
+import { jwtDecode } from 'jwt-decode';
 import axios from "axios";
 
 axios.interceptors.request.use(
@@ -26,7 +27,16 @@ export default function Auth() {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            navigate('/');
+            try {
+                const decodedToken = jwtDecode(token);
+                const userRole = decodedToken.role;
+                localStorage.setItem('role', userRole);
+                navigate('/');
+            } catch (error) {
+                console.error('Ошибка декодирования токена:', error);
+                localStorage.removeItem('token');
+                localStorage.removeItem('role');
+            }
         }
     }, [navigate]);
 
@@ -40,6 +50,9 @@ export default function Auth() {
             });
             console.log(response.data);
             localStorage.setItem('token', response.data.token);
+            const decodedToken = jwtDecode(response.data.token); 
+            const userRole = decodedToken.role;
+            localStorage.setItem('role', userRole);
             navigate("/")
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -49,7 +62,7 @@ export default function Auth() {
                 setError("Произошла ошибка. Пожалуйста, попробуйте снова.");
             }
         }
-    }
+    };
 
     return (
         <section className="auth">

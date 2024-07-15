@@ -20,8 +20,8 @@ export default function App() {
           <Route path='/' element={<Home />} />
           <Route path='/auth' element={<Auth />} />
           <Route path='/reg' element={<Reg />} />
-          <Route path="/addCabinetForm" element={<AddCabinetForm />} />
           <Route path="/wardrobe/:id" element={<CabinetDetails />} />
+          <Route path="/addCabinetForm" element={<AddCabinetForm />} />
           <Route path="/wardrobe/edit/:id" element={<AddCabinetForm />} />
         </Routes>
       </Suspense>

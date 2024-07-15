@@ -5,18 +5,18 @@ import { useState, useRef, useEffect } from "react";
 import axios from 'axios';
 import IMask from 'imask';
 
+
 export default function Registration() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
-    const [passwordConfirm, setPasswordConfirm] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
 
     const phoneInputRef = useRef(null);
-
 
     useEffect(() => {
         if (phoneInputRef.current) {
@@ -33,30 +33,23 @@ export default function Registration() {
 
     const handleRegistration = async (event) => {
         event.preventDefault();
-        setErrors({});
-        
-        if (password !== passwordConfirm) {
-            setErrors(prevErrors => ({ ...prevErrors, passwordConfirm: 'Пароли не совпадают' }));
-            return;
-        }
 
-         try {
+        try {
             const response = await axios.post('http://localhost:7362/auth/registration', {
-                username,
+                username: username,
                 full_name: fullName,
-                email,
-                phone,
-                password,
-                hashed_password: passwordConfirm,
+                email: email,
+                phone: phone,
+                password: password,
+                hashed_password: confirmPassword,
             });
             console.log(response.data);
             navigate("/auth");
         } catch (error) {
-            if (error.response && error.response.data) {
-                const serverErrors = error.response.data.errors || {};
-                setErrors(serverErrors);
+            if (error.response && error.response.data && error.response.data.errors) {
+                setErrors(error.response.data.errors);
             } else {
-                setErrors(prevErrors => ({ ...prevErrors, server: 'Ошибка регистрации' }));
+                console.error('Ошибка регистрации:', error);
             }
         }
     }
@@ -80,8 +73,8 @@ export default function Registration() {
                                 placeholder="Введите имя"
                                 value={fullName}
                                 onChange={(e) => setFullName(e.target.value)} />
-                            {errors.fullName && <span className="error">{errors.fullName}</span>}
-                            </div>
+                            <span className="error">{errors.fullName}</span>
+                        </div>
 
                         <div className="auth__input">
                             <label htmlFor="login">Логин</label>
@@ -93,7 +86,7 @@ export default function Registration() {
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                             />
-                            <span>{errors.username}</span>
+                            <span className="error">{errors.username}</span>
                         </div>
 
                         <div className="auth__input">
@@ -106,7 +99,7 @@ export default function Registration() {
                                 ref={phoneInputRef}
                                 value={phone}
                                 onChange={(e) => setPhone(e.target.value)} />
-                            <span>{errors.phone}</span>
+                            <span className="error">{errors.phone}</span>
                         </div>
 
                         <div className="auth__input">
@@ -118,7 +111,7 @@ export default function Registration() {
                                 placeholder="Введите свою почту"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)} />
-                            <span>{errors.email}</span>
+                            <span className="error">{errors.email}</span>
                         </div>
 
                         <div className="auth__input">
@@ -131,20 +124,20 @@ export default function Registration() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            <span>{errors.password}</span>
+                            <span className="error">{errors.password}</span>
                         </div>
 
                         <div className="auth__input">
-                            <label htmlFor="passwordConfirm">Подтверждение пароля</label>
+                            <label htmlFor="confirmPassword">Подтверждение пароля</label>
                             <input
                                 className="input"
-                                id="passwordConfirm"
+                                id="confirmPassword"
                                 type="password"
                                 placeholder="Повторите пароль"
-                                value={passwordConfirm}
-                                onChange={(e) => setPasswordConfirm(e.target.value)}
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
                             />
-                            <span>{errors.passwordConfirm}</span>
+                            <span className="error">{errors.confirmPassword}</span>
                         </div>
                     </div>
                     <div className="auth_send">

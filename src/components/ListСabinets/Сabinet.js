@@ -4,9 +4,11 @@ import Shkaf from '../../assets/image/сabinet/test.png';
 import Button from '../Button/Button';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 
 export default function Cabinet({ wardrobe, onDelete }) {
+    const [userRole, setUserRole] = useState('');
 
     const handleDelete = async () => {
         const confirmDelete = window.confirm(`Вы уверены, что хотите удалить шкаф "${wardrobe.title}"?`);
@@ -25,6 +27,14 @@ export default function Cabinet({ wardrobe, onDelete }) {
             alert("Произошла ошибка при удалении шкафа.");
         }
     }
+
+    useEffect(() => {
+        const role = localStorage.getItem('role');
+        setUserRole(role);
+    }, []);
+
+
+
 
 
     return (
@@ -51,10 +61,13 @@ export default function Cabinet({ wardrobe, onDelete }) {
                     </div>
                 </div>
             </Link>
-            <div className="panel_admin">
-                <button className="cabinet_delete" onClick={handleDelete}></button>
-                <Link className="cabinet_edit" to={`/wardrobe/edit/${wardrobe.id}`}></Link>
-            </div>
+
+            {userRole === 'admin' && (
+                <div className="panel_admin">
+                    <button className="cabinet_delete" onClick={handleDelete}></button>
+                    <Link className="cabinet_edit" to={`/wardrobe/edit/${wardrobe.id}`}></Link>
+                </div>
+            )}
 
         </li>
     );

@@ -6,6 +6,7 @@ import * as images from '../images/image';
 
 export default function ListСabinets({ titleSection, showAll }) {
     const [wardrobes, setWardrobes] = useState([]);
+    const [userRole, setUserRole] = useState('');
 
     useEffect(() => {
         const fetchWardrobes = async () => {
@@ -17,6 +18,9 @@ export default function ListСabinets({ titleSection, showAll }) {
             }
         };
         fetchWardrobes();
+
+        const role = localStorage.getItem('role');
+        setUserRole(role);
     }, []);
 
     const handleDeleteWardrobe = (id) => {
@@ -31,9 +35,10 @@ export default function ListСabinets({ titleSection, showAll }) {
             <div className="container">
                 <h1 className="title">{titleSection}</h1>
                 <ul className="cabinets__list">
-                    {location.pathname === '/' && (
+                    {userRole === 'admin' && location.pathname === '/' && (
                         <Link className='cabinets_create' to="/addCabinetForm">Добавить Шкаф</Link>
                     )}
+
                     {displayWardrobes.length > 0 ? (
                         displayWardrobes.map((wardrobe) => (
                             <Cabinet key={wardrobe.id} wardrobe={wardrobe} onDelete={handleDeleteWardrobe} />

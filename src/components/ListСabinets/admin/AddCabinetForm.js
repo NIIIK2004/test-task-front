@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Form, useNavigate, useParams } from 'react-router-dom';
+import { Form, Link, useNavigate, useParams } from 'react-router-dom';
 import Button from '../../Button/Button';
 
 import '../../../assets/css/global.css';
@@ -8,6 +8,7 @@ import '../../../assets/css/global.css';
 
 export default function AddCabinetForm() {
     const { id } = useParams();
+    const [userRole, setUserRole] = useState('');
     const navigate = useNavigate();
 
     const initialFormData = {
@@ -29,6 +30,12 @@ export default function AddCabinetForm() {
     useEffect(() => {
         if (id) {
             fetchWardrobe(id);
+        }
+
+        const role = localStorage.getItem('role');
+        setUserRole(role);
+        if(role === 'user' || role === null) {
+            navigate("/");
         }
     }, [id]);
 
@@ -92,7 +99,10 @@ export default function AddCabinetForm() {
     return (
         <section className="auth cabinet_section">
             <div className="container">
-                <h1 className="title">{id ? 'Редактирование шкафа' : 'Добавление шкафа'}</h1>
+                <div className="cabinet_title">
+                    <h1 className="title">{id ? 'Редактирование шкафа' : 'Добавление шкафа'}</h1>
+                    <Link to={"/"}>Вернуться назад</Link>
+                </div>
                 <form onSubmit={handleSubmit} className="cabinet_form-add">
                     <div className="cabinet_form-top">
                         <div className="auth__input">
@@ -139,8 +149,6 @@ export default function AddCabinetForm() {
                         <div className="inputFile">
                             <label className='inputFile-label' htmlFor='file'>
                                 {file ? file.name : formData.filename ? formData.filename : 'Загрузите изображение'}
-                                
-                                {/* <img className="cabinets__img" src={`http://localhost:7362/uploads/${formData.filename}`} /> */}
                             </label>
                             <input type="file" name="file" id='file' onChange={handleFileChange} />
                         </div>
